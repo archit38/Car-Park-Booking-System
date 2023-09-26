@@ -29,9 +29,5 @@ WORKDIR /app
 # Copy the published application from the build image
 COPY --from=build /app/out ./
 
-# Specify the entry point for your application
-ENTRYPOINT ["dotnet", "YourApp.dll"]
-
-
 # Define the entry point for the application.
 ENTRYPOINT ["dotnet", "BookingSystem.API.dll"]
