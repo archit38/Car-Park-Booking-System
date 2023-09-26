@@ -4,9 +4,14 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 # Set the working directory
 WORKDIR /app
 
-# Copy the .csproj and .sln files to the container
-COPY *.csproj ./
-COPY *.sln ./
+# Copy the solution file to the container
+COPY ParkingService.sln ./
+
+# Copy the project files from each project folder
+COPY BookingSystem.Data/*.csproj ./BookingSystem.Data/
+COPY BookingSystem.Services/*.csproj ./BookingSystem.Services/
+COPY BookingSystem.API/*.csproj ./BookingSystem.API/
+# Repeat this for each project folder
 
 # Restore dependencies
 RUN dotnet restore
@@ -29,5 +34,5 @@ WORKDIR /app
 # Copy the published application from the build image
 COPY --from=build /app/out ./
 
-# Define the entry point for the application.
+# Specify the entry point for your application
 ENTRYPOINT ["dotnet", "BookingSystem.API.dll"]
