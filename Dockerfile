@@ -1,31 +1,37 @@
-# Use the official .NET SDK image as a build stage.
+# Use the appropriate base image with .NET SDK
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
-# Set the working directory to /app.
+# Set the working directory
 WORKDIR /app
 
-# Copy the .csproj and .sln files and restore any dependencies (if applicable).
+# Copy the .csproj and .sln files to the container
 COPY *.csproj ./
 COPY *.sln ./
+
+# Restore dependencies
 RUN dotnet restore
 
-# Copy the remaining source code to the container.
-COPY . .
+# Copy the remaining source code to the container
+COPY . ./
 
-# Build the application in release mode.
-RUN dotnet publish -c Release -o out
+# Build the application
+RUN dotnet build -c Release -o out
 
-# Use a smaller runtime image for the final stage.
+# Publish the application
+RUN dotnet publish -c Release -o /app/out
+
+# Create a runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 
-# Set the working directory to /app.
+# Set the working directory
 WORKDIR /app
 
-# Copy the published application from the build stage.
-COPY --from=build /app/out .
+# Copy the published application from the build image
+COPY --from=build /app/out ./
 
-# Expose port 80 for the web application.
-EXPOSE 80
+# Specify the entry point for your application
+ENTRYPOINT ["dotnet", "YourApp.dll"]
+
 
 # Define the entry point for the application.
 ENTRYPOINT ["dotnet", "BookingSystem.API.dll"]
