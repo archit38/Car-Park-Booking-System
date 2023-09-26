@@ -9,6 +9,7 @@ COPY ParkingService.sln ./
 
 # Copy the project files from each project folder
 COPY BookingSystem.Data/*.csproj ./BookingSystem.Data/
+COPY UnitTests/*.csproj ./UnitTests/
 COPY BookingSystem.Services/*.csproj ./BookingSystem.Services/
 COPY BookingSystem.API/*.csproj ./BookingSystem.API/
 # Repeat this for each project folder
